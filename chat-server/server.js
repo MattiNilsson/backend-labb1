@@ -5,6 +5,7 @@ const io = require('socket.io')(http);
 const fs = require("fs");
 
 const userData = require("./data/users.json");
+const roomData = require("./data/rooms.json");
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -40,6 +41,44 @@ app.get("/login", (req, res) => {
     }
   }else{
     res.status(400).send("failed?");
+  }
+})
+app.get("/rooms", (req, res) => {
+  if(roomData){
+    res.status(200).send(roomData);
+  }else{
+    res.status(500).send("server fail?")
+  }
+})
+app.post("/createRoom", (req, res) => {
+  if(req.body.name){
+    for(let i = 0; i < roomData.rooms.length; i++){
+      if(roomData.rooms[i].name === req.body.name){
+        res.status(400).send("room by that name already exists");
+      }
+    }
+    let data = roomData;
+    let newRoom = {name : req.body.name, password : req.body.pass, messeges : []}
+    data.rooms.push(newRoom);
+    fs.writeFile("./data/rooms.json", JSON.stringify(data) ,function(err){
+      console.log("Room Created =" + req.body.username);
+    });
+    res.status(201).send(data);
+  }else{
+    res.status(400).send("bad request");
+  }
+})
+app.delete("/deleteRoom", (req, res) => {
+  console.log(req.query);
+  if(req.query.id){
+    let data = roomData;
+    let newData = data.rooms.splice(req.query.id, 1);
+    fs.writeFile("./data/rooms.json", JSON.stringify(newData) ,function(err){
+      console.log("Room deleted");
+    });
+    res.status(204).send(newData);
+  }else{
+    res.status(400).send("something went wrong");
   }
 })
 io.on('connection', (socket) => {
