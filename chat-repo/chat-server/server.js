@@ -52,6 +52,7 @@ app.get("/rooms", (req, res) => {
 })
 app.post("/createRoom", (req, res) => {
   if(req.body.name){
+    if(roomData.rooms)
     for(let i = 0; i < roomData.rooms.length; i++){
       if(roomData.rooms[i].name === req.body.name){
         res.status(400).send("room by that name already exists");
@@ -72,7 +73,13 @@ app.delete("/deleteRoom", (req, res) => {
   console.log(req.query);
   if(req.query.id){
     let data = roomData;
-    let newData = data.rooms.splice(req.query.id, 1);
+
+    let newData;
+    if(data.rooms.length > 1){
+      newData = data.rooms.splice(req.query.id, 1);
+    }else{
+      newData = {rooms : []};
+    }
     fs.writeFile("./data/rooms.json", JSON.stringify(newData) ,function(err){
       console.log("Room deleted");
     });
