@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import HeaderComp from "./components/HeaderComp";
 import Lobby from "./components/Lobby";
+import ChatRoom from "./components/ChatRoom";
 
 function App() {
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignUp} />
         <Route path="/lobby" component={Lobby} />
+        <Route path="/chatroom" component={ChatRoom} />
       </Router>
     </div>
   );

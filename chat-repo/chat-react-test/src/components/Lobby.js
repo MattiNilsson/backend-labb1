@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { Redirect } from 'react-router-dom';
 import axios from "axios";
+
+import ButtonComp from "./micro-comp/ButtonComp";
 
 const Wrapper = styled.main`
   margin-top: 100px;
@@ -11,34 +14,93 @@ const Wrapper = styled.main`
     border-spacing: 0px;
   }
   th{
-    border: 1px solid gray;
+    border-bottom: 2px solid white;
     text-align: left;
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0);
     padding-right: 50px;
+    font-size: 20px;
   }
   .flex{
     width: ${window.innerWidth * 0.5}px;
     display:flex;
-    justify-content: space-between;
+    justify-content: center;
   }
-  form{
+  .addRoom{
     display:flex;
     flex-direction: column;
+    position: absolute;
+    left: 30px;
+  }
+  .nameChange{
+    display:flex;
+    flex-direction: column;
+    position: absolute;
+    right: 30px;
   }
   td{
-    border: 1px solid gray;
+    border-bottom: 1px solid gray;
     background-color: rgba(0,0,0,0.02);
     text-align: left;
     transition: 0.2s ease-out all;
+    font-size: 18px;
   }
   tr:hover > td{
-    border: 1px solid white;
+    border-bottom: 1px solid white;
+    background-color: rgba(255,255,255,0.03);
+    cursor: pointer;
+  }
+  input{
+    margin-top: 10px;
+    border-left: 4px solid white;
+    border-bottom: 4px solid white;
+    border-right: 4px solid rgba(0,0,0,0);
+    border-top: 4px solid rgba(0,0,0,0);
+    height: 30px;
+    font-size: 20px;
+    padding-left: 5px;
+    width: 185px;
+    background-color: rgba(0,0,0,0);
+    color: white;
+    outline: none;
+    transition: all 0.4s ease-out;
+  }
+  input:focus{
+    border-left: 4px solid #ffa31a;
+    border-bottom: 4px solid #ffa31a;
+  }
+  .sideline{
+    width: 5px;
+    height: 200px;
+    border-right: 10px solid #ffa31a;
+    border-top: 30px solid rgba(0,0,0,0);
+    border-bottom: 30px solid rgba(0,0,0,0);
+    position: relative;
+    left: -20px;
+    top: -250px;
+  }
+  .sidelineRight{
+    width: 5px;
+    height: 200px;
+    border-left: 10px solid #ffa31a;
+    border-top: 30px solid rgba(0,0,0,0);
+    border-bottom: 30px solid rgba(0,0,0,0);
+    position: relative;
+    right: -210px;
+    top: -150px;
+  }
+  label{
+    text-align: left;
+    position: relative;
+    top: 10px;
+    left:2px;
   }
 `
 
 function Lobby(props){
-  const [rooms, setRooms] = useState("");
+  const [rooms, setRooms] = useState(false);
   const [inputValues, setInput] = useState({name : "", pass : ""})
+  const [redirectTo, setRedirect] = useState("");
+  const [fakeUsername, setFake] = useState("");
 
   useEffect(() => {
     axios.get("/rooms")
@@ -68,6 +130,10 @@ function Lobby(props){
     setInput(newValues);
   }
 
+  function fakeChange(e){
+    setFake(e.target.value);
+  }
+
   function deleteLobby(e){
     let myId = e.target.id
     axios.delete("/deleteRoom", {params: {id: myId}})
@@ -80,31 +146,65 @@ function Lobby(props){
     .catch(err => console.log(err))
   }
 
+  function joinLobby(e, room){
+    setRedirect({redirect : "/chatroom", room : room});
+  }
+  let redirect
+  if(redirectTo){
+    redirect = (
+      <Redirect to={{
+        pathname : redirectTo.redirect,
+        state : {room : redirectTo.room, fake : fakeUsername}
+        
+      }} />
+    );
+  }
+
   let addRoomForm = (
-    <form onSubmit={(e) => {addRoom(e)}}>
-      <h2>create lobby</h2>
-      <label>lobby name</label>
+    <form className="addRoom" onSubmit={(e) => {addRoom(e)}}>
+      <h2 style={{textDecoration : "underline"}}>Create new room</h2>
+      <label>room name</label>
       <input 
         name="name"
         value={inputValues.name}
         onChange={(e) => inputChange(e)}
+        placeholder=" . . ."
+        type="text"
       />
-      <label>lobby password</label>
+      <label>password (optional)</label>
       <input 
         name="pass"
         value={inputValues.pass}
         onChange={(e) => inputChange(e)}
+        placeholder=" . . ."
+        type="text"
       />
-      <button type="submit">submit</button>
+      <ButtonComp name="create room" type="submit">submit</ButtonComp>
+      <div className="sideline"></div>
     </form>
   )
-
+  let quickNameChange = (
+    <form className="nameChange">
+      <h2 style={{textDecoration : "underline"}}>Fake name</h2>
+      <label>new name</label>
+      <input 
+        placeholder=". . ."
+        onChange={(e) => {fakeChange(e)}}
+        value={fakeUsername}
+      />
+      <ButtonComp name="set new name" type="submit">submit</ButtonComp>
+      <div className="sidelineRight"></div>
+    </form>
+  )
+  
   if(rooms.rooms){
     return(
       <Wrapper>
+        {redirect}
         <h1>lobby</h1>
         <div className="flex">
           {addRoomForm}
+          {quickNameChange}
   
           <div>
             <h2>join lobby</h2>
@@ -119,7 +219,7 @@ function Lobby(props){
                 {rooms.rooms.map((index, id) => {
                   return(
                     <tr key={index.name + id}>
-                      <td>{index.name}</td>
+                      <td onClick={(e, room) => {joinLobby(e, index.name)}}>{index.name}</td>
                       <td>{index.password === "" ? "none" : "true"}</td>
                       <td onClick={(e) => {deleteLobby(e)}}id={id}>Remove</td>
                     </tr>

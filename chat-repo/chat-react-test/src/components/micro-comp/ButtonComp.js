@@ -29,6 +29,10 @@ margin-top: 15px;
   width: 196px;
   border-bottom: 4px solid #ffa31a;
 }
+:focus > .underline{
+  width: 196px;
+  border-bottom: 4px solid #ffa31a;
+}
 :hover{
   cursor: pointer;
 }
@@ -49,6 +53,10 @@ margin-top: 15px;
   width: 166px;
   border-bottom: 30px solid #ffa31a;
 }
+:focus > .background{
+  width: 166px;
+  border-bottom: 30px solid #ffa31a;
+}
 
 :active > .background{
   transition: 0.1s linear all;
@@ -63,7 +71,7 @@ margin-top: 15px;
 
 function ButtonComp(props){
   return(
-    <Wrapper>
+    <Wrapper tabindex="1">
       {props.name}
       <div className="background"></div>
       <div className="underline"></div>
