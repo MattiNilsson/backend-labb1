@@ -94,6 +94,15 @@ const Wrapper = styled.main`
     top: 10px;
     left:2px;
   }
+  .flexJoin{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .flexJoin > h2{
+    margin-bottom: 0;
+  }
 `
 
 function Lobby(props){
@@ -101,6 +110,8 @@ function Lobby(props){
   const [inputValues, setInput] = useState({name : "", pass : ""})
   const [redirectTo, setRedirect] = useState("");
   const [fakeUsername, setFake] = useState("");
+  const [selected, setSelected] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     axios.get("/rooms")
@@ -147,7 +158,15 @@ function Lobby(props){
   }
 
   function joinLobby(e, room){
+    e.preventDefault();
+    if(selected.password !== password){
+      alert("wrong password");
+      return;
+    }
     setRedirect({redirect : "/chatroom", room : room});
+  }
+  function selectLobby(e, room, password){
+    setSelected({room : room, password : password})
   }
   let redirect
   if(redirectTo){
@@ -159,7 +178,6 @@ function Lobby(props){
       }} />
     );
   }
-
   let addRoomForm = (
     <form className="addRoom" onSubmit={(e) => {addRoom(e)}}>
       <h2 style={{textDecoration : "underline"}}>Create new room</h2>
@@ -192,10 +210,28 @@ function Lobby(props){
         onChange={(e) => {fakeChange(e)}}
         value={fakeUsername}
       />
-      <ButtonComp name="set new name" type="submit">submit</ButtonComp>
       <div className="sidelineRight"></div>
     </form>
   )
+
+  function inputPassword(e){
+    setPassword(e.target.value);
+  }
+
+  let selectedHTML;
+  if(selected){
+    selectedHTML = (
+      <div>
+        <form className="flexJoin" onSubmit={(e) => {joinLobby(e, selected.room)}}>
+          <h2>{selected.room}</h2>
+          {selected.password === "" ? 
+            <div></div> : 
+            <input value={password} onChange={(e) => {inputPassword(e)}} placeholder="password"/>}
+          <ButtonComp name="Join" type="submit">submit</ButtonComp>
+        </form>
+      </div>
+    )
+  }
   
   if(rooms.rooms){
     return(
@@ -219,7 +255,7 @@ function Lobby(props){
                 {rooms.rooms.map((index, id) => {
                   return(
                     <tr key={index.name + id}>
-                      <td onClick={(e, room) => {joinLobby(e, index.name)}}>{index.name}</td>
+                      <td onClick={(e) => {selectLobby(e, index.name , index.password)}}>{index.name}</td>
                       <td>{index.password === "" ? "none" : "true"}</td>
                       <td onClick={(e) => {deleteLobby(e)}}id={id}>Remove</td>
                     </tr>
@@ -227,6 +263,7 @@ function Lobby(props){
                 })}
               </tbody>
             </table>
+            {selectedHTML}
           </div>
         </div>
       </Wrapper>

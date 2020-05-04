@@ -4,6 +4,8 @@ import styled from "styled-components";
 import axios from "axios"
 import io from "socket.io-client";
 
+import {socket} from "./socket";
+
 const Wrapper = styled.main`
 margin-top: 25px;
 display:flex;
@@ -150,12 +152,13 @@ h2{
 
 `
 
+
+
 function ChatRoom(props){
   const [redirectTo, setRedirect] = useState("");
   const [message, setMessage] = useState("");
   const [allMessages, setAllMessages] = useState([]);
   const [user, setUser] = useState("");
-  const socket = io("http://localhost:4040");
 
   const messagesEndRef = useRef(null)
 
@@ -166,6 +169,7 @@ function ChatRoom(props){
   useEffect(scrollToBottom, [allMessages]);
 
   useEffect(() => {
+    console.log("render")
     socket.emit('join', props.location.state.room, localStorage.getItem("user"));
     if(allMessages.length < 1){
       axios.get("/rooms", {params: {name: props.location.state.room}})
@@ -178,6 +182,7 @@ function ChatRoom(props){
   }, [])
 
   useEffect(() => {
+    console.log("rendertwoooo")
     socket.on("broad-message", data => {
       console.log(data);
       displayAll(data);
@@ -198,6 +203,14 @@ function ChatRoom(props){
     }else{
       socket.emit('message', props.location.state.room, message, user);
     }
+    // {"user":"lol","msg":"gg"}
+    let newMessage = [...allMessages]
+    if(props.location.state.fake){
+      newMessage.push({user : props.location.state.fake, msg : message})
+    }else{
+      newMessage.push({user : user, msg : message})
+    }
+    setAllMessages(newMessage);
     setMessage("");
   }
 

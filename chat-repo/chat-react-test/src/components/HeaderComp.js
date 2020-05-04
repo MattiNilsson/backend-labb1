@@ -69,7 +69,7 @@ function HeaderComp(props){
     return(
       <Wrapper>
         <button onClick={onLogout}>log out</button>
-        <h1>Chat-hub</h1>
+        <h1>Chat-app</h1>
         <span className="user">
           {localStorage.getItem("user")}
         </span>
@@ -80,7 +80,7 @@ function HeaderComp(props){
   }else{
     return(
       <Wrapper>
-        <h1>Chat-hub</h1>
+        <h1>Chat-app</h1>
         <div></div>
       </Wrapper>
     )

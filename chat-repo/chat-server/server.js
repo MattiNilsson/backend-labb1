@@ -126,7 +126,7 @@ app.delete("/deleteRoom", (req, res) => {
 io.sockets.on('connection', function(socket) {
   socket.on('join', function(room, name) {
     socket.join(room);
-    socket.to(room).broadcast.emit(name + " joined room");
+    socket.to(room).emit(name + " joined room");
     console.log("user joined " + room)
   });
   socket.on('message', function(room, msg, user){
@@ -143,7 +143,7 @@ io.sockets.on('connection', function(socket) {
       });
     })
     console.log(msg, "user :" + user, room);
-    socket.to(room).broadcast.emit('broad-message', {user: user, msg : msg});
+    socket.to(room).emit('broad-message', {user: user, msg : msg});
   });
 });
 
