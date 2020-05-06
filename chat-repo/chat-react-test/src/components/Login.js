@@ -77,6 +77,7 @@ function Login(props){
           placeholder="password" 
           value={inputValues.password} 
           name="password" 
+          type="password"
           onChange={(e) => {loginChange(e)}}
         />
         <ButtonComp type="submit" name="Log In"/>

@@ -86,7 +86,7 @@ app.post("/createRoom", (req, res) => {
           return;
         }
       }
-      let newRoom = {name : req.body.name, password : req.body.pass, messeges : []}
+      let newRoom = {name : req.body.name.replace(/ /g, "-"), password : req.body.pass, messeges : []}
       data.rooms.push(newRoom);
       fs.writeFile("./data/rooms.json", JSON.stringify(data) ,function(err){
         console.log("Room Created =" + req.body.username);

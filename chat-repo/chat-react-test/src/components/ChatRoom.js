@@ -177,6 +177,10 @@ function ChatRoom(props){
         console.log(res);
         setAllMessages(res.data.messeges);
       })
+      .catch((err) => {
+        console.log( err );
+        setRedirect("/lobby")
+      })
     }
     setUser(localStorage.getItem("user"))
   }, [])

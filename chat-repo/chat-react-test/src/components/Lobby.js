@@ -128,7 +128,7 @@ function Lobby(props){
     .then((response) => {
       console.log(response);
       let newRooms = {...rooms};
-      newRooms.rooms.push({name : inputValues.name, password : inputValues.pass, messages : []})
+      newRooms.rooms.push({name : inputValues.name.replace(/ /g, "-"), password : inputValues.pass, messages : []})
       setRooms(newRooms);
       setInput({name : "", pass : ""})
     })
