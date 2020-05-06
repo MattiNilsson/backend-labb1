@@ -19,6 +19,8 @@ const Wrapper = styled.main`
     background-color: rgba(0,0,0,0);
     padding-right: 50px;
     font-size: 20px;
+    position: relative;
+    left: 30px;
   }
   .flex{
     width: ${window.innerWidth * 0.5}px;
@@ -43,6 +45,8 @@ const Wrapper = styled.main`
     text-align: left;
     transition: 0.2s ease-out all;
     font-size: 18px;
+    position: relative;
+    left: 30px;
   }
   tr:hover > td{
     border-bottom: 1px solid white;
@@ -65,13 +69,13 @@ const Wrapper = styled.main`
     transition: all 0.4s ease-out;
   }
   input:focus{
-    border-left: 4px solid #ffa31a;
-    border-bottom: 4px solid #ffa31a;
+    border-left: 4px solid #35c9f1;
+    border-bottom: 4px solid #35c9f1;
   }
   .sideline{
     width: 5px;
     height: 200px;
-    border-right: 10px solid #ffa31a;
+    border-right: 10px solid #35c9f1;
     border-top: 30px solid rgba(0,0,0,0);
     border-bottom: 30px solid rgba(0,0,0,0);
     position: relative;
@@ -81,7 +85,7 @@ const Wrapper = styled.main`
   .sidelineRight{
     width: 5px;
     height: 200px;
-    border-left: 10px solid #ffa31a;
+    border-left: 10px solid #35c9f1;
     border-top: 30px solid rgba(0,0,0,0);
     border-bottom: 30px solid rgba(0,0,0,0);
     position: relative;
@@ -102,6 +106,29 @@ const Wrapper = styled.main`
   }
   .flexJoin > h2{
     margin-bottom: 0;
+  }
+  .lock{
+    position: relative;
+    left: -160px;
+    border: 0px;
+    top: 2px;
+    font-size: 18px;
+  }
+  .button{
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    border-right: 2px rgba(0,0,0,0);
+    border-top: 2px rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+    color: white;
+    height: 18px;
+    position: relative;
+    left: 10px;
+    top: -4px;
+  }
+  .button:hover{
+    border-left: 2px solid #35c9f1;
+    border-bottom: 2px solid #35c9f1;
   }
 `
 
@@ -202,7 +229,7 @@ function Lobby(props){
     </form>
   )
   let quickNameChange = (
-    <form className="nameChange">
+    <div className="nameChange">
       <h2 style={{textDecoration : "underline"}}>Fake name</h2>
       <label>new name</label>
       <input 
@@ -211,7 +238,7 @@ function Lobby(props){
         value={fakeUsername}
       />
       <div className="sidelineRight"></div>
-    </form>
+    </div>
   )
 
   function inputPassword(e){
@@ -248,7 +275,6 @@ function Lobby(props){
               <thead>
                 <tr>
                   <th>room name</th>
-                  <th>password</th>
                 </tr>
               </thead>
               <tbody>
@@ -256,8 +282,11 @@ function Lobby(props){
                   return(
                     <tr key={index.name + id}>
                       <td onClick={(e) => {selectLobby(e, index.name , index.password)}}>{index.name}</td>
-                      <td>{index.password === "" ? "none" : "true"}</td>
-                      <td onClick={(e) => {deleteLobby(e)}}id={id}>Remove</td>
+                      <span className="lock">{index.password === "" ? 
+                      <span class="material-icons">lock_open</span> : 
+                      <span class="material-icons">lock</span>
+                      }</span>
+                      <button className="button" onClick={(e) => {deleteLobby(e)}}id={id}>Remove</button>
                     </tr>
                   )
                 })}

@@ -69,7 +69,7 @@ align-items: center;
   height: auto;
   max-width: 280px;
   text-align: left;
-  border: 1px solid #ffa31a;
+  border: 1px solid #35c9f1;
   border-radius: 0 15px 15px 15px;
   padding: 10px;
   margin-left: 10px;
@@ -80,7 +80,7 @@ align-items: center;
   position: relative;
   left: -110px;
   top: 15px;
-  color: #ffa31a;
+  color: #35c9f1;
 }
 input{
   margin-top: 10px;
@@ -98,12 +98,12 @@ input{
     transition: all 0.4s ease-out;
 }
 input:focus{
-  border-left: 4px solid #ffa31a;
-  border-bottom: 4px solid #ffa31a;
+  border-left: 4px solid #35c9f1;
+  border-bottom: 4px solid #35c9f1;
 }
 input:focus ~ .send{
-  border: 2px solid #ffa31a;
-  background-color: #ffa31a;
+  border: 2px solid #35c9f1;
+  background-color: #35c9f1;
 }
 .send{
   transition: all 0.4s ease-out;
@@ -136,8 +136,8 @@ input:focus ~ .send{
 
 }
 .return:hover{
-  border: 2px solid #ffa31a;
-  background-color: #ffa31a;
+  border: 2px solid #35c9f1;
+  background-color: #35c9f1;
 }
 .return > span{
   position: relative;

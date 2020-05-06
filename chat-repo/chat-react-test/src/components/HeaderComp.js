@@ -19,7 +19,7 @@ h1{
 div{
   width: ${window.innerWidth}px;
   height: 2px;
-  background-color : #ffa31a;
+  background-color : #35c9f1;
   position: absolute;
   bottom: 0;
   z-index: 2;
@@ -37,7 +37,7 @@ button{
   font-size: 20px;
 }
 button:hover{
-  border-bottom: 2px solid  #ffa31a;
+  border-bottom: 2px solid  #35c9f1;
   cursor: pointer;
 }
 .user{

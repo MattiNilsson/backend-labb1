@@ -27,11 +27,11 @@ margin-top: 15px;
 
 :hover > .underline{
   width: 196px;
-  border-bottom: 4px solid #ffa31a;
+  border-bottom: 4px solid #35c9f1;
 }
 :focus > .underline{
   width: 196px;
-  border-bottom: 4px solid #ffa31a;
+  border-bottom: 4px solid #35c9f1;
 }
 :hover{
   cursor: pointer;
@@ -51,11 +51,11 @@ margin-top: 15px;
 }
 :hover > .background{
   width: 166px;
-  border-bottom: 30px solid #ffa31a;
+  border-bottom: 30px solid #35c9f1;
 }
 :focus > .background{
   width: 166px;
-  border-bottom: 30px solid #ffa31a;
+  border-bottom: 30px solid #35c9f1;
 }
 
 :active > .background{
